@@ -5,6 +5,7 @@
 # frozen_string_literal: true
 
 require "pry"
+require "active_record"
 
 ### 1 How to Load Core Extensions ###
 
@@ -34,22 +35,18 @@ require "active_support/all" # Yet mostly everything is still only lazy-loaded t
 ## arrays e hashes vazios
 ## demais objetos que respondem a blank?
 vencedores = []
-if vencedores.blank?
-  p "Não há vencedores"
-end
+p "Não há vencedores" if vencedores.blank?
 
 # O que é present?
 ## É o inverso do blank?
 vencedores.push("Fulano")
-if vencedores.present?
-  p "Há vencedores"
-end
+p "Há vencedores" if vencedores.present?
 
 # 2.2 presence
 ## Retorna o recebedor da mensagem se present?, e nil caso contrário
 ## Bom pra combinar com códigos defensivos
-config = { :host => 'www.rodrigo.dinie.com' }
-host = config[:host].presence || 'localhost'
+config = { host: "www.rodrigo.dinie.com" }
+host = config[:host].presence || "localhost"
 p host
 
 # 2.3 duplicable? (I think this one should be skipped)
@@ -86,9 +83,7 @@ p obj1, obj2
 # without try
 number = nil
 result = nil
-unless number.nil?
-  result = number.to_s
-end
+result = number.to_s unless number.nil?
 p result
 
 # with try
@@ -147,7 +142,7 @@ p uma_pessoa.to_query("pessoa")
 # É uma forma de "fatorar" opções em comum em uma série de chamadas de métodos, evitando duplicação
 
 # Observe a duplicação
-class Account < ApplicationRecord
+class Account < ActiveRecord::Base
   has_many :customers, dependent: :destroy
   has_many :products,  dependent: :destroy
   has_many :invoices,  dependent: :destroy
@@ -155,7 +150,7 @@ class Account < ApplicationRecord
 end
 
 # Resolvendo isso com with_options
-class Account < ApplicationRecord
+class Account < ActiveRecord::Base
   with_options dependent: :destroy do |assoc|
     assoc.has_many :customers
     assoc.has_many :products
@@ -166,4 +161,38 @@ end
 # Também tem como aninhar construções com with_options
 
 # 2.11 JSON support
-# Ela que provê uma boa implementação do método to_json
+# Oferece uma boa implementação do método to_json
+
+# 2.12 Instance Variables
+# O active support oferece diversos métodos para facilitar o acesso a variáveis de instância
+
+# 2.12.1 instance_values
+# Retorna um hash que mapeia variávies de instância para os seus valores
+class C
+  def initialize(x, y)
+    @x, @y = x, y
+  end
+end
+
+p C.new(0, 1).instance_values # => {"x" => 0, "y" => 1}
+
+# 2.12.2 instance_variable_names
+# Retorna um array com os nomes das variáveis de instância
+class C
+  def initialize(x, y)
+    @x, @y = x, y
+  end
+end
+
+p C.new(0, 1).instance_variable_names # => ["@x", "@y"]
+
+# 2.13 Silencing Warnings and Exceptions
+# Não entendi direito pra que serve
+
+# 2.14 in?
+# Testa se um objeto está contido em outro
+# Irá gerar uma exceção se o argumento passado não responder a include?
+p 1.in?([1, 2]) # => true
+p "lo".in?("hello")   # => true
+p 25.in?(30..50)      # => false
+# p 1.in?(1)            # => ArgumentError
