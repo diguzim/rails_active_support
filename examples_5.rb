@@ -89,9 +89,7 @@ p text
 # Mas serve pra qualquer string, não apenas para heredoc
 text = "Olá!\nMeu nome é Rodrigo".indent(2)
 p text
-# Outras configurações:
-# indent_string: string utilizada para identar (default: " ")
-# indent_empty_lines: se deve identar linhas vazias (default falso)
+# Existem outras configurações, como o que usar para identar, se identa ou não linhas em branco, etc
 
 # 5.11 Access
 # Acesso a partes da string

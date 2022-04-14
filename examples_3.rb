@@ -24,15 +24,6 @@ require "active_support/all"
 # user = AnotherUser.new("rodrigo@dinie.com")
 # p user.login, user.email
 
-# 3.1.2 Internal Attributes
-# Quando definimos uma subclasse é possível que acabemos sobrescrevendo nomes de atributos,
-# principalmente aqueles que não fazem parte da interface pública
-# Essa técnica ajuda a evitar esse tipo de problema
-#TODO, não consegui usar corretamente
-
-# 3.1.3 Module Attributes
-# Mesma coisa que os cattr_* definidos em classes (veremos depois)
-
 # 3.2 Parents
 
 # 3.2.1 module_parent
@@ -54,25 +45,22 @@ p X::Y::Z.module_parent_name
 # Retorna toda a cadeia de pais do módulo
 p X::Y::Z.module_parents
 
-# 3.3 Anonymous
-# Sobre módulos anônimos, não soa muito interessante
-
 # 3.4 Method Delegation
 # O macro delegate oferece uma forma fácil de encaminhar métodos de um objeto para outro
 # É particularmente útil com associações do Active Record
 
 # Obs: Instanciar essa classe só vai funcionar dentro do Rails
-# class Profile < ActiveRecord::Base
-#   attr_accessor :name, :age
-# end
+class Profile < ActiveRecord::Base
+  attr_accessor :name, :age
+end
 
-# class User < ActiveRecord::Base
-#   has_one :profile
+class User < ActiveRecord::Base
+  has_one :profile
 
-#   def name
-#     profile.name
-#   end
-# end
+  def name
+    profile.name
+  end
+end
 
 # usando o delegate
 # class User < ApplicationRecord
@@ -82,7 +70,6 @@ p X::Y::Z.module_parents
 # end
 
 # obs: o método delegado deve ser público (no caso, em Profile)
-# delegate :name, :age, to: :profile
 
 # E o que acontece se o usuário não tiver um perfil, e tentar acessar um método do perfil?
 # Por padrão da exceção, mas podemos retornar um nulo ao invés
@@ -93,9 +80,6 @@ p X::Y::Z.module_parents
 # podemos adicionar um prefixo ao delegar
 # delegate :name, to: :profile, prefix: true
 # user.profile_name # => nil
-# Podemos também customizar esse prefixo
-# delegate :name, to: :profile, prefix: :register
-# user.register_name # => nil
 
 # Métodos delegados são públicos por padrão. Para torná-los privados basta:
 # delegate :name, to: :profile, private: true
@@ -118,7 +102,7 @@ class Salute
   end
 end
 
-class Olar
+class Olar < Salute
   redefine_method(:hello) { p "Olar" }
 end
 

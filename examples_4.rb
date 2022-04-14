@@ -33,10 +33,11 @@ p B.x # => :b
 # E curiosamente eles também são acessíveis em objetos dessa classe
 obj = A.new
 p obj.x
-# Se não quisermos sobrescrever esses atributos, podemos usar:
+# Podemos sobrescrever esses atributos em nível de instância:
 obj.x = "hadouken"
 p obj.x
 
+# Mas se não quisermos sobrescrever esses atributos, podemos usar:
 class Base
   class_attribute :x, instance_writer: false, default: "my"
 end

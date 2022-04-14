@@ -25,6 +25,10 @@ require "active_support/all" # Yet mostly everything is still only lazy-loaded t
 
 # Normalmente uma aplicação em RoR carrega todo o Active Support por padrão
 
+# E o que o Active Support faz?
+# Eles reabrem e extendem vários dos Objetos nativos do Ruby com novos métodos,
+# como o String, Array, Hash, etc. Eles são muito úteis para aplicações Ruby
+
 ### 2 Extensions to All Objects ###
 # Aqui vamos falar de algumas extensões que podem ser aplicadas a todos os objetos
 
@@ -46,6 +50,10 @@ p "Há vencedores" if vencedores.present?
 ## Retorna o recebedor da mensagem se present?, e nil caso contrário
 ## Bom pra combinar com códigos defensivos
 config = { host: "www.rodrigo.dinie.com" }
+host = config[:host].presence || "localhost"
+p host
+
+config = { host: "" }
 host = config[:host].presence || "localhost"
 p host
 
@@ -162,6 +170,8 @@ end
 
 # 2.11 JSON support
 # Oferece uma boa implementação do método to_json
+pessoa = { nome: "Rodrigo", idade: 32 }
+p pessoa.to_json
 
 # 2.12 Instance Variables
 # O active support oferece diversos métodos para facilitar o acesso a variáveis de instância
